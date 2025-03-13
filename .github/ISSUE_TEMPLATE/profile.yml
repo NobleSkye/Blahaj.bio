@@ -1,0 +1,76 @@
+name: Profile Request
+description: Request to create your profile on blahaj.bio
+title: "[Profile] Username"
+labels: ["profile-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for creating your blahaj.bio profile! Please fill out the information below.
+        
+  - type: input
+    id: username
+    attributes:
+      label: Username
+      description: Your desired username for blahaj.bio/username
+      placeholder: blahaj
+    validations:
+      required: true
+      
+  - type: input
+    id: display-name
+    attributes:
+      label: Display Name
+      description: Your name as you'd like it to appear
+      placeholder: Blåhaj
+    validations:
+      required: true
+      
+  - type: textarea
+    id: bio
+    attributes:
+      label: Bio
+      description: Tell us about yourself! Markdown is supported.
+      placeholder: |
+        Just a friendly shark swimming through the digital ocean! 🦈
+
+        I love making friends and helping people feel safe and comfortable online.
+    validations:
+      required: true
+      
+  - type: input
+    id: github
+    attributes:
+      label: GitHub Profile
+      description: Your GitHub profile URL
+      placeholder: https://github.com/username
+      
+  - type: input
+    id: twitter
+    attributes:
+      label: Twitter Profile
+      description: Your Twitter profile URL
+      placeholder: https://twitter.com/username
+      
+  - type: input
+    id: mastodon
+    attributes:
+      label: Mastodon Profile
+      description: Your Mastodon profile URL
+      placeholder: https://mastodon.social/@username
+      
+  - type: input
+    id: website
+    attributes:
+      label: Personal Website
+      description: Your personal website URL
+      placeholder: https://example.com
+      
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this profile, you agree to our Code of Conduct
+      options:
+        - label: I agree to follow the blahaj.bio Code of Conduct
+          required: true
