@@ -1,0 +1,51 @@
+name: Generate Profile Page
+
+on:
+  issues:
+    types:
+      - opened
+
+jobs:
+  generate-profile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract issue data
+        id: extract
+        run: |
+          echo "USERNAME=$(jq -r '.issue.body | capture("(?<=id: username\\n).*?") | .[0] // empty' "$GITHUB_EVENT_PATH")" >> $GITHUB_ENV
+          echo "DISPLAY_NAME=$(jq -r '.issue.body | capture("(?<=id: display_name\\n).*?") | .[0] // empty' "$GITHUB_EVENT_PATH")" >> $GITHUB_ENV
+          echo "BIO=$(jq -r '.issue.body | capture("(?<=id: bio\\n).*?") | .[0] // empty' "$GITHUB_EVENT_PATH")" >> $GITHUB_ENV
+          echo "LINKS=$(jq -r '.issue.body | capture("(?<=id: links\\n).*?") | .[0] // empty' "$GITHUB_EVENT_PATH")" >> $GITHUB_ENV
+
+      - name: Generate profile page
+        run: |
+          mkdir -p profiles/${USERNAME}
+          cat <<EOF > profiles/${USERNAME}/index.md
+          ---
+          layout: profile
+          title: "${DISPLAY_NAME}'s Profile"
+          ---
+
+          # ${DISPLAY_NAME}
+
+          ${BIO}
+
+          ## Links
+          ${LINKS}
+          EOF
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add profiles/${USERNAME}/index.md
+          git commit -m "Create profile page for ${USERNAME}" || echo "No changes to commit"
+          git push
+
+      - name: Close issue
+        uses: peter-evans/close-issue@v2
+        with:
+          comment: "Profile page for [${USERNAME}](https://blahaj.bio/${USERNAME}) has been created!"
