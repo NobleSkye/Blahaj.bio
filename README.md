@@ -1,57 +1,48 @@
-# work in progress expect bugs
+# Astro Starter Kit: Basics
 
-# blahaj.bio - Your Shark-Friendly Bio Page 🦈
-
-Create your own profile page at blahaj.bio/username with a simple GitHub issue!
-
-## How to Create Your Profile
-
-1. [Create a new profile request](../../issues/new?template=profile.yml)
-2. Fill out your profile information
-3. Upload your profile picture as `pfp.png` in the issue
-4. Submit the issue
-5. Wait for the GitHub Action to generate your page
-6. Visit `blahaj.bio/your-username`
-
-## Example Profile
-
-```markdown
-### Username
-blahaj
-
-### Display Name
-Blåhaj
-
-### Bio
-Just a friendly shark swimming through the digital ocean! 🦈
-
-I love making friends and helping people feel safe and comfortable online.
-
-### GitHub Profile
-https://github.com/blahaj
-
-### Twitter Profile
-https://twitter.com/blahaj
-
-### Mastodon Profile
-https://mastodon.social/@blahaj
-
-### Website
-https://example.com
+```sh
+npm create astro@latest -- --template basics
 ```
 
-## Features
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
+[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
 
-- Markdown support in bio
-- Custom profile picture
-- Social media links
-- Responsive design
-- Automatic deployment
+> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
 
-## Code of Conduct
+![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
 
-By creating a profile, you agree to:
-- Be respectful and inclusive
-- No harmful or offensive content
-- Keep it family-friendly
-- Follow GitHub's Terms of Service
+## 🚀 Project Structure
+
+Inside of your Astro project, you'll see the following folders and files:
+
+```text
+/
+├── public/
+│   └── favicon.svg
+├── src/
+│   ├── layouts/
+│   │   └── Layout.astro
+│   └── pages/
+│       └── index.astro
+└── package.json
+```
+
+To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+
+## 🧞 Commands
+
+All commands are run from the root of the project, from a terminal:
+
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `npm install`             | Installs dependencies                            |
+| `npm run dev`             | Starts local dev server at `localhost:4321`      |
+| `npm run build`           | Build your production site to `./dist/`          |
+| `npm run preview`         | Preview your build locally, before deploying     |
+| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `npm run astro -- --help` | Get help using the Astro CLI                     |
+
+## 👀 Want to learn more?
+
+Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).

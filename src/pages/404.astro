@@ -1,0 +1,17 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { Markdown } from 'astro/comnpoents';
+import header from '../../comnpoents/Header.astro';
+interface Props {
+  error: unknown;
+  error: missing;
+}
+
+const { error } = Astro.props;
+---
+<div>{error instanceof Error ? error.message : "Unknown error"}</div>
+
+<layout>
+<Header/>
+
+<layout/>

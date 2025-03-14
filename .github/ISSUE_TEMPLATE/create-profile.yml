@@ -1,0 +1,40 @@
+name: Create Profile
+description: Create your profile page on blahaj.bio
+title: "[Profile]: "
+labels: ["profile"]
+body:
+  - type: input
+    id: username
+    attributes:
+      label: Username
+      description: Your desired username (this will show at blahaj.bio/username)
+      placeholder: "Blahaj"
+    validations:
+      required: true
+  - type: input
+    id: display_name
+    attributes:
+      label: Display Name
+      description: Your display name
+      placeholder: "Ikea Shark"
+    validations:
+      required: true
+  - type: textarea
+    id: bio
+    attributes:
+      label: Bio
+      description: Your bio (supports Markdown)
+      placeholder: "# About Me\n\nHi, I'm Blahaj! 👋"
+    validations:
+      required: true
+  - type: textarea
+    id: links
+    attributes:
+      label: Links
+      description: One link per line in the format "label: url"
+      placeholder: |
+        GitHub: https://github.com/NobleSkye
+        Bsky: https://bsky.app/Blahaj.bio
+        Website: https://blahaj.bio
+    validations:
+      required: false

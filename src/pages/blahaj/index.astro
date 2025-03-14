@@ -1,0 +1,49 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { Markdown } from 'astro/components';
+
+const profile = {
+  username: "blahaj",
+  displayName: "BLÅHAJ",
+  bio: `🦈 IKEA's favorite shark, spreading joy and comfort since 2011! Professional swimmer, hugger, and comfort expert. Always here to support the LGBTQ+ community with 100cm of pure love! 🌈`,
+  links: [
+    { label: "IKEA Page", url: "https://www.ikea.com/us/en/p/blahaj-soft-toy-shark-90373590/" },
+    { label: "Store", url: "https://blahaj.store" },
+    { label: "BSky", url: "https://bsky.app/blaha.bio" }
+  ]
+};
+---
+
+<Layout>
+  <div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+      <div class="bg-white rounded-2xl shadow-xl p-8 mb-8">
+        <div class="flex items-center gap-4 mb-6">
+          <img
+            src="https://www.ikea.com/us/en/images/products/blahaj-soft-toy-shark__0710175_pe727378_s5.jpg"
+            alt="BLÅHAJ"
+            class="w-24 h-24 rounded-full object-cover border-4 border-blue-100"
+          />
+          <div>
+            <h1 class="text-3xl font-bold text-blue-900 mb-1">{profile.displayName}</h1>
+            <p class="text-blue-600 mb-2">@{profile.username}</p>
+            <p class="text-blue-700 text-sm">{profile.bio}</p>
+          </div>
+        </div>
+        
+        <div class="grid gap-3">
+          {profile.links.map(link => (
+            <a
+              href={link.url}
+              class="block p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
