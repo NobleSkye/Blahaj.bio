@@ -1,119 +1,34 @@
-name: Bio Website Profile Generator
+name: Generate Profile
+
 on:
   issues:
-    types: [opened, edited]
-  pull_request:
     types: [opened, edited]
 
 jobs:
   generate-profile:
+    if: contains(github.event.issue.labels.*.name, 'profile')
     runs-on: ubuntu-latest
-    if: contains(github.event.issue.labels.*.name, 'profile-request')
-    
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
-      - name: Parse Issue Content
-        id: parser
-        uses: actions/github-script@v6
+      - name: Parse Issue Body
+        id: parse
+        uses: actions/github-script@v7
         with:
           script: |
-            const issue = context.payload.issue;
-            const body = issue.body;
-            
-            // Parse the issue body using the new template format
-            const lines = body.split('\n');
-            const data = {};
-            
-            for (let i = 0; i < lines.length; i++) {
-              const line = lines[i].trim();
-              if (line.startsWith('### ')) {
-                const key = line.slice(4).toLowerCase().replace(/ /g, '_');
-                data[key] = lines[i + 2].trim();
-                i += 2;
-              }
-            }
-            
-            return {
-              username: data.username,
-              displayName: data.display_name,
-              bio: data.bio,
-              socials: {
-                github: data.github_profile || '',
-                twitter: data.twitter_profile || '',
-                mastodon: data.mastodon_profile || '',
-                website: data.website || ''
-              }
-            };
+            const body = context.payload.issue.body;
+            // Parse the issue body and extract profile information
+            // Add logic here to generate profile data
 
-      - name: Generate Profile Page
+      - name: Generate Profile
         run: |
-          mkdir -p profiles/${{ fromJSON(steps.parser.outputs.result).username }}
-          
-          # Generate the profile page using the template
-          cat > profiles/${{ fromJSON(steps.parser.outputs.result).username }}/index.html << EOF
-          <!DOCTYPE html>
-          <html lang="en">
-            <head>
-              <meta charset="UTF-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>${{ fromJSON(steps.parser.outputs.result).displayName }} | blahaj.bio</title>
-              <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2/dist/tailwind.min.css" rel="stylesheet">
-              <link href="https://cdn.jsdelivr.net/npm/@tailwindcss/typography@0.4.x/dist/typography.min.css" rel="stylesheet">
-            </head>
-            <body class="bg-gradient-to-br from-blue-50 to-indigo-50 min-h-screen p-6">
-              <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
-                <div class="relative h-32 bg-gradient-to-r from-blue-400 to-indigo-500">
-                  <div class="absolute -bottom-16 left-6">
-                    <img
-                      src="pfp.png"
-                      alt="${{ fromJSON(steps.parser.outputs.result).displayName }}"
-                      class="w-32 h-32 rounded-full border-4 border-white shadow-lg object-cover"
-                    />
-                  </div>
-                </div>
-                
-                <div class="pt-20 pb-8 px-6">
-                  <div class="flex items-center justify-between mb-4">
-                    <div>
-                      <h1 class="text-2xl font-bold text-gray-900">${{ fromJSON(steps.parser.outputs.result).displayName }}</h1>
-                      <p class="text-gray-600">@${{ fromJSON(steps.parser.outputs.result).username }}</p>
-                    </div>
-                  </div>
-                  
-                  <div class="prose prose-blue max-w-none mb-6">
-                    ${{ fromJSON(steps.parser.outputs.result).bio }}
-                  </div>
+          # Add commands to generate profile page
+          echo "Generating profile..."
 
-                  <div class="flex space-x-4">
-                    <!-- Social Links -->
-                    ${{ join(fromJSON(steps.parser.outputs.result).socials.*.url, '') }}
-                  </div>
-                </div>
-              </div>
-            </body>
-          </html>
-          EOF
-
-      - name: Handle Profile Picture
-        run: |
-          # Move uploaded pfp.png to profile directory if it exists
-          if [ -f "pfp.png" ]; then
-            mv pfp.png profiles/${{ fromJSON(steps.parser.outputs.result).username }}/
-          fi
-
-      - name: Commit and Push Changes
-        run: |
-          git config --global user.name 'GitHub Actions'
-          git config --global user.email 'actions@github.com'
-          git add profiles/
-          git commit -m "Add profile for ${{ fromJSON(steps.parser.outputs.result).username }}"
-          git push
-
-      - name: Build and Deploy Site
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./profiles
-          publish_branch: gh-pages
-          cname: blahaj.bio
+          commit-message: "feat: add new profile"
+          title: "Add profile from issue #${{ github.event.issue.number }}"
+          body: "Automatically generated profile from issue #${{ github.event.issue.number }}"
+          branch: "profile/${{ github.event.issue.number }}"
