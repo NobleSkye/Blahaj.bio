@@ -1,76 +1,72 @@
-name: Profile Request
-description: Request to create your profile on blahaj.bio
-title: "[Profile] Username"
-labels: ["profile-request"]
+name: "🐟 Profile Request"
+description: "Request to add your profile to Blahaj.bio"
+title: "Profile: [YOUR NAME]"
+labels: ["profile"]
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for creating your blahaj.bio profile! Please fill out the information below.
-        
+        Thanks for taking the time to submit your profile! Please fill out the information below.
+  
   - type: input
-    id: username
+    id: name
     attributes:
-      label: Username
-      description: Your desired username for blahaj.bio/username
-      placeholder: blahaj
+      label: Name
+      description: What name would you like displayed on your profile?
+      placeholder: "Jane Doe"
     validations:
       required: true
-      
+
   - type: input
-    id: display-name
+    id: pronouns
     attributes:
-      label: Display Name
-      description: Your name as you'd like it to appear
-      placeholder: Blåhaj
+      label: Pronouns
+      description: What are your pronouns?
+      placeholder: "they/them"
     validations:
       required: true
-      
+
   - type: textarea
     id: bio
     attributes:
       label: Bio
-      description: Tell us about yourself! Markdown is supported.
-      placeholder: |
-        Just a friendly shark swimming through the digital ocean! 🦈
+      description: Tell us a bit about yourself! This will be displayed on your profile.
+      placeholder: "I'm a software engineer who loves cats and coding!"
+    validations:
+      required: true
 
-        I love making friends and helping people feel safe and comfortable online.
+  - type: input
+    id: website
+    attributes:
+      label: Website
+      description: Do you have a personal website?
+      placeholder: "https://example.com"
+    validations:
+      required: false
+
+  - type: input
+    id: github
+    attributes:
+      label: GitHub Username
+      description: What's your GitHub username?
+      placeholder: "@username"
     validations:
       required: true
       
   - type: input
-    id: github
-    attributes:
-      label: GitHub Profile
-      description: Your GitHub profile URL
-      placeholder: https://github.com/username
-      
-  - type: input
-    id: twitter
-    attributes:
-      label: Twitter Profile
-      description: Your Twitter profile URL
-      placeholder: https://twitter.com/username
-      
-  - type: input
     id: mastodon
     attributes:
-      label: Mastodon Profile
-      description: Your Mastodon profile URL
-      placeholder: https://mastodon.social/@username
-      
-  - type: input
-    id: website
-    attributes:
-      label: Personal Website
-      description: Your personal website URL
-      placeholder: https://example.com
-      
+      label: Mastodon
+      description: What's your Mastodon handle?
+      placeholder: "@username@instance.social"
+    validations:
+      required: false
+
   - type: checkboxes
     id: terms
     attributes:
       label: Code of Conduct
-      description: By submitting this profile, you agree to our Code of Conduct
+      description: By submitting this profile, you agree to follow our Code of Conduct
       options:
-        - label: I agree to follow the blahaj.bio Code of Conduct
+        - label: I agree to follow the Code of Conduct
           required: true
