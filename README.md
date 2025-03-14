@@ -1,3 +1,5 @@
+# work in progress expect bugs
+
 # blahaj.bio - Your Shark-Friendly Bio Page 🦈
 
 Create your own profile page at blahaj.bio/username with a simple GitHub issue!
