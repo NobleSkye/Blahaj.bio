@@ -1,40 +1,56 @@
-name: Create Profile
-description: Create your profile page on blahaj.bio
-title: "[Profile]: "
-labels: ["profile"]
-body:
-  - type: input
-    id: username
-    attributes:
-      label: Username
-      description: Your desired username (this will show at blahaj.bio/username)
-      placeholder: "Blahaj"
-    validations:
-      required: true
-  - type: input
-    id: display_name
-    attributes:
-      label: Display Name
-      description: Your display name
-      placeholder: "Ikea Shark"
-    validations:
-      required: true
-  - type: textarea
-    id: bio
-    attributes:
-      label: Bio
-      description: Your bio (supports Markdown)
-      placeholder: "# About Me\n\nHi, I'm Blahaj! 👋"
-    validations:
-      required: true
-  - type: textarea
-    id: links
-    attributes:
-      label: Links
-      description: One link per line in the format "label: url"
-      placeholder: |
-        GitHub: https://github.com/NobleSkye
-        Bsky: https://bsky.app/Blahaj.bio
-        Website: https://blahaj.bio
-    validations:
-      required: false
+name: Generate Profile Page
+
+on:
+  issues:
+    types:
+      - opened
+
+jobs:
+  generate-profile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract issue data
+        id: extract
+        run: |
+          USERNAME=$(grep -A1 'id: username' "$GITHUB_EVENT_PATH" | tail -n1 | awk '{$1=$1};1')
+          DISPLAY_NAME=$(grep -A1 'id: display_name' "$GITHUB_EVENT_PATH" | tail -n1 | awk '{$1=$1};1')
+          BIO=$(grep -A1 'id: bio' "$GITHUB_EVENT_PATH" | tail -n1 | awk '{$1=$1};1')
+          LINKS=$(grep -A1 'id: links' "$GITHUB_EVENT_PATH" | tail -n1 | awk '{$1=$1};1')
+
+          echo "USERNAME=${USERNAME}" >> $GITHUB_ENV
+          echo "DISPLAY_NAME=${DISPLAY_NAME}" >> $GITHUB_ENV
+          echo "BIO=${BIO}" >> $GITHUB_ENV
+          echo "LINKS=${LINKS}" >> $GITHUB_ENV
+
+      - name: Generate profile page
+        run: |
+          mkdir -p profiles/${USERNAME}
+          cat <<EOF > profiles/${USERNAME}/index.md
+          ---
+          layout: profile
+          title: "${DISPLAY_NAME}'s Profile"
+          ---
+
+          # ${DISPLAY_NAME}
+
+          ${BIO}
+
+          ## Links
+          ${LINKS}
+          EOF
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add profiles/${USERNAME}/index.md
+          git commit -m "Create profile page for ${USERNAME}" || echo "No changes to commit"
+          git push
+
+      - name: Close issue
+        uses: peter-evans/close-issue@v2
+        with:
+          comment: "Profile page for [${USERNAME}](https://blahaj.bio/${USERNAME}) has been created!"
