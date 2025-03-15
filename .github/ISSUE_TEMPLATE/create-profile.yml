@@ -17,20 +17,24 @@ jobs:
         run: |
           USERNAME=$(grep -A1 'id: username' "$GITHUB_EVENT_PATH" | tail -n1 | awk '{$1=$1};1')
           DISPLAY_NAME=$(grep -A1 'id: display_name' "$GITHUB_EVENT_PATH" | tail -n1 | awk '{$1=$1};1')
-          BIO=$(grep -A1 'id: bio' "$GITHUB_EVENT_PATH" | tail -n1 | awk '{$1=$1};1')
-          LINKS=$(grep -A1 'id: links' "$GITHUB_EVENT_PATH" | tail -n1 | awk '{$1=$1};1')
+          BIO=$(awk '/id: bio/{flag=1; next} /id: links/{flag=0} flag' "$GITHUB_EVENT_PATH" | sed '/^$/d')
+          LINKS=$(awk '/id: links/{flag=1; next} flag' "$GITHUB_EVENT_PATH" | sed '/^$/d')
 
           echo "USERNAME=${USERNAME}" >> $GITHUB_ENV
           echo "DISPLAY_NAME=${DISPLAY_NAME}" >> $GITHUB_ENV
-          echo "BIO=${BIO}" >> $GITHUB_ENV
-          echo "LINKS=${LINKS}" >> $GITHUB_ENV
+          echo "BIO<<EOF" >> $GITHUB_ENV
+          echo "${BIO}" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "LINKS<<EOF" >> $GITHUB_ENV
+          echo "${LINKS}" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Generate profile page
         run: |
           mkdir -p profiles/${USERNAME}
           cat <<EOF > profiles/${USERNAME}/index.md
           ---
-          layout: profile
+          layout: "profile"
           title: "${DISPLAY_NAME}'s Profile"
           ---
 
